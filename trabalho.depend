@@ -82,3 +82,31 @@
 	"funcionario.h"
 	"interface.h"
 
+1685370228 source:/home/carlos/Documentos/workspace/trabalho-aedsII/interface.c
+	<stdio.h>
+	<stdlib.h>
+	"interface.h"
+	"funcionario.h"
+
+1685063994 /home/carlos/Documentos/workspace/trabalho-aedsII/interface.h
+	<stdio.h>
+	<stdlib.h>
+	"funcionario.h"
+
+1685390796 /home/carlos/Documentos/workspace/trabalho-aedsII/funcionario.h
+	<stdlib.h>
+	<stdio.h>
+
+1685369836 source:/home/carlos/Documentos/workspace/trabalho-aedsII/main.c
+	<stdio.h>
+	<stdlib.h>
+	<locale.h>
+	"funcionario.h"
+	"interface.h"
+
+1685390745 source:/home/carlos/Documentos/workspace/trabalho-aedsII/funcionario.c
+	"funcionario.h"
+	<string.h>
+	<stdlib.h>
+	<stdarg.h>
+
