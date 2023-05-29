@@ -1,0 +1,84 @@
+# depslib dependency file v1.0
+1685066733 source:/home/carlos/Documentos/UFOP/3_Periodo/AEDS_II/trabalho/funcionario.c
+	"funcionario.h"
+	<string.h>
+	<stdlib.h>
+	<stdarg.h>
+
+1685066190 /home/carlos/Documentos/UFOP/3_Periodo/AEDS_II/trabalho/funcionario.h
+	<stdlib.h>
+	<stdio.h>
+
+1685066289 source:/home/carlos/Documentos/UFOP/3_Periodo/AEDS_II/trabalho/interface.c
+	<stdio.h>
+	<stdlib.h>
+	"interface.h"
+
+1685063994 /home/carlos/Documentos/UFOP/3_Periodo/AEDS_II/trabalho/interface.h
+	<stdio.h>
+	<stdlib.h>
+	"funcionario.h"
+
+1685064022 source:/home/carlos/Documentos/UFOP/3_Periodo/AEDS_II/trabalho/main.c
+	<stdio.h>
+	<stdlib.h>
+	<locale.h>
+	"funcionario.h"
+	"interface.h"
+
+1685370738 source:/home/carlos/Documentos/workspace/trabalho/funcionario.c
+	"funcionario.h"
+	<string.h>
+	<stdlib.h>
+	<stdarg.h>
+
+1685368590 /home/carlos/Documentos/workspace/trabalho/funcionario.h
+	<stdlib.h>
+	<stdio.h>
+
+1685370228 source:/home/carlos/Documentos/workspace/trabalho/interface.c
+	<stdio.h>
+	<stdlib.h>
+	"interface.h"
+	"funcionario.h"
+
+1685063994 /home/carlos/Documentos/workspace/trabalho/interface.h
+	<stdio.h>
+	<stdlib.h>
+	"funcionario.h"
+
+1685369836 source:/home/carlos/Documentos/workspace/trabalho/main.c
+	<stdio.h>
+	<stdlib.h>
+	<locale.h>
+	"funcionario.h"
+	"interface.h"
+
+1685370738 source:/home/carlos/Documentos/workspace/t1_aedsII/funcionario.c
+	"funcionario.h"
+	<string.h>
+	<stdlib.h>
+	<stdarg.h>
+
+1685368590 /home/carlos/Documentos/workspace/t1_aedsII/funcionario.h
+	<stdlib.h>
+	<stdio.h>
+
+1685370228 source:/home/carlos/Documentos/workspace/t1_aedsII/interface.c
+	<stdio.h>
+	<stdlib.h>
+	"interface.h"
+	"funcionario.h"
+
+1685063994 /home/carlos/Documentos/workspace/t1_aedsII/interface.h
+	<stdio.h>
+	<stdlib.h>
+	"funcionario.h"
+
+1685369836 source:/home/carlos/Documentos/workspace/t1_aedsII/main.c
+	<stdio.h>
+	<stdlib.h>
+	<locale.h>
+	"funcionario.h"
+	"interface.h"
+
