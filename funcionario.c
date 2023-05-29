@@ -1,7 +1,3 @@
-//
-// Created by Vanessa Braganholo on 16/09/2018.
-//
-
 #include "funcionario.h"
 #include <string.h>
 #include <stdlib.h>
