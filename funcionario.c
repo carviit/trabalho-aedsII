@@ -218,6 +218,7 @@ void busca_sequencial(FILE *in) {
     printf("\nDigite o código do funcionário que deseja buscar: ");
     scanf("%d", &codigo);
 
+
     while (fread(&funcionario.cod, sizeof(int), 1, in) == 1) {
         fread(funcionario.nome, sizeof(char), sizeof(funcionario.nome), in);
         fread(funcionario.cpf, sizeof(char), sizeof(funcionario.cpf), in);

@@ -8,7 +8,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef struct Funcionario {
+typedef struct Funcionario
+{
     int cod;
     char nome[50];
     char cpf[12];

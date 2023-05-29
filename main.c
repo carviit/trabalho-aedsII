@@ -19,8 +19,7 @@ int main(int argc, char** argv)
     }
     else
     {
-
-          MENU(out);
+        MENU(out);
 
     }
 }
