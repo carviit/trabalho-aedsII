@@ -82,7 +82,7 @@
 	"funcionario.h"
 	"interface.h"
 
-1685370228 source:/home/carlos/Documentos/workspace/trabalho-aedsII/interface.c
+1685407330 source:/home/carlos/Documentos/workspace/trabalho-aedsII/interface.c
 	<stdio.h>
 	<stdlib.h>
 	"interface.h"
@@ -93,7 +93,7 @@
 	<stdlib.h>
 	"funcionario.h"
 
-1685398689 /home/carlos/Documentos/workspace/trabalho-aedsII/funcionario.h
+1685405953 /home/carlos/Documentos/workspace/trabalho-aedsII/funcionario.h
 	<stdlib.h>
 	<stdio.h>
 
@@ -104,9 +104,10 @@
 	"funcionario.h"
 	"interface.h"
 
-1685398644 source:/home/carlos/Documentos/workspace/trabalho-aedsII/funcionario.c
+1685407190 source:/home/carlos/Documentos/workspace/trabalho-aedsII/funcionario.c
 	"funcionario.h"
 	<string.h>
 	<stdlib.h>
 	<stdarg.h>
+	<time.h>
 

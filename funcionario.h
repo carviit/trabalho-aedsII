@@ -51,5 +51,11 @@ void gerarDataNascimento(char *dataNascimento);
 
 void busca_sequencial(FILE *in);
 
+void busca_binaria(FILE *arq, int tam);
+
+int tamanho_registro();
+
+int tamanho_arquivo(FILE *arq);
+
 #endif //FUNCIONARIOS_FUNCIONARIO_H
 

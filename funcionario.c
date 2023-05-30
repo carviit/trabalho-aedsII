@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <time.h>
 
 // Imprime funcionario
 void imprime(TFunc *func)
@@ -209,39 +210,96 @@ void sobrescreve_quarto_funcionario(FILE *in)
     }
 }
 
-void busca_sequencial(FILE *in) {
+void busca_sequencial(FILE *in)
+{
 
     TFunc funcionario;
     int i = 0;
     int codigo;
+    int comp;
 
     printf("\nDigite o código do funcionário que deseja buscar: ");
     scanf("%d", &codigo);
 
+    while (fread(&funcionario.cod, sizeof(int), 1, in) == 1)
+    {
+        clock_t inicio = clock();
 
-    while (fread(&funcionario.cod, sizeof(int), 1, in) == 1) {
         fread(funcionario.nome, sizeof(char), sizeof(funcionario.nome), in);
         fread(funcionario.cpf, sizeof(char), sizeof(funcionario.cpf), in);
         fread(funcionario.data_nascimento, sizeof(char), sizeof(funcionario.data_nascimento), in);
         fread(&funcionario.salario, sizeof(double), 1, in);
 
-        if (codigo == funcionario.cod) {
+        comp++;
+
+
+        if (codigo == funcionario.cod)
+        {
             printf("\n\n====== Funcionário encontrado ======\n");
             printf("ID: %d\n", funcionario.cod);
             printf("Nome: %s\n", funcionario.nome);
             printf("CPF: %s\n", funcionario.cpf);
             printf("Data de Nascimento: %s\n", funcionario.data_nascimento);
             printf("Salário: R$%.2f\n", funcionario.salario);
+
             i = 1;
+            clock_t fim = clock();
+
+            double tempoTotal = (double) (fim - inicio) / CLOCKS_PER_SEC;
+
+            printf("\nTempo de busca: %f segundos", tempoTotal);
+            printf("\nNúmero de comparações: %d", comp);
+
+
             break;
         }
     }
 
-    if (!i) {
+    if (!i)
+    {
         printf("\n>>> Funcionário não encontrado.\n");
     }
 }
 
+void busca_binaria(FILE *arq, int tam) {
 
+  int cod = 0;
 
+  printf("\nDigite o código que deseja buscar: ");
+  scanf("%d", &cod);
+
+  int left = 0, right = tam - 1;
+  while(left <= right)
+  {
+    int middle = (left + right) / 2;
+    fseek(arq, middle * tamanho_registro(), SEEK_SET);
+    TFunc* func = le(arq);
+    if(cod == func->cod) {
+
+      imprime(func);
+    }
+    else if(func->cod < cod) {
+      left = middle + 1;
+    }
+    else {
+      right = middle - 1;
+    }
+  }
+
+  printf("\n>>> Funcionário não encontrado");
+}
+
+int tamanho_registro() {
+
+  return sizeof(TFunc);
+
+}
+
+int tamanho_arquivo(FILE *arq) {
+
+  fseek(arq, 0, SEEK_END);
+  int tam = trunc(ftell(arq) / tamanho_registro());
+
+  return tam;
+}
 

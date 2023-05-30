@@ -10,8 +10,9 @@ void MSG_MENU( )
     printf("\n\n\t1. CRIAR BASE DE DADOS");
     printf("  \n\t2. IMPRIMIR BASE DE DADOS");
     printf("  \n\t3. BUSCA SEQUENCIAL");
-    printf("  \n\t4. LIMPAR TELA");
-    printf("  \n\t5. SAIR");
+    printf("  \n\t4. BUSCA BINÁRIA");
+    printf("  \n\t5. LIMPAR TELA");
+    printf("  \n\t6. SAIR");
 
 }
 
@@ -31,12 +32,32 @@ void MENU(FILE *out)
         {
         case 1:
 
+            int opc = 0;
+
+            do{
+
+            printf("\n1 --- Base Ordenada");
+            printf("\n2 --- Base Desordenada\n");
+
+            printf("\nOPÇÃO: ");
+            scanf("%d", &opc);
+
+            }while(opc != 1 && opc != 2);
+
+            if(opc == 1){
+
             cria_e_salva(out);
+
+            }else{
+
+
+            }
 
             break;
         case 2:
 
-            le_funcionarios_e_imprime(out);
+                le_funcionarios_e_imprime(out);
+
 
             system("PAUSE");
             break;
@@ -49,11 +70,14 @@ void MENU(FILE *out)
 
         case 4:
 
-            system("clear");
+            busca_binaria(out, 5000);
+
+
             break;
 
         case 5:
 
+            system("clear");
             break;
 
         default:
@@ -62,7 +86,7 @@ void MENU(FILE *out)
             system("PAUSE");
         } // fim do bloco switch
     }
-    while(opcao != 5);
+    while(opcao != 6);
 }
 
 //FIM
