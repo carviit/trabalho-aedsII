@@ -2,13 +2,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include <time.h>
 
 // Imprime funcionario
 void imprime(TFunc *func)
 {
     printf("**********************************************");
-    printf("\nFuncionario de código ");
+    printf("\nFuncionario de codigo ");
     printf("%d", func->cod);
     printf("\nNome: ");
     printf("%s", func->nome);
@@ -16,7 +15,7 @@ void imprime(TFunc *func)
     printf("%s", func->cpf);
     printf("\nData de Nascimento: ");
     printf("%s", func->data_nascimento);
-    printf("\nSalário: ");
+    printf("\nSalario: ");
     printf("%4.2f", func->salario);
     printf("\n**********************************************");
 }
@@ -51,7 +50,6 @@ void salva(TFunc *func, FILE *out)
 // Retorna um ponteiro para funcionario lido do arquivo
 TFunc *le(FILE *in)
 {
-
     TFunc *func = (TFunc *) malloc(sizeof(TFunc));
     if (0 >= fread(&func->cod, sizeof(int), 1, in))
     {
@@ -75,72 +73,83 @@ int tamanho()
            + sizeof(double); //salario
 }
 
-
-void gerarNome(int contador, char *nome)
+void insere_5_funcionarios(FILE *out)
 {
-    sprintf(nome, "Func %d", contador); // Gera o nome com base no valor do contador
+    printf("Inserindo 5 funcionários no arquivo...");
 
+    TFunc *f1 = funcionario(1, "Ana", "000.000.000-00", "01/01/1980", 3000);
+    salva(f1, out);
+    free(f1);
+    TFunc *f2 = funcionario(2, "Carlos", "111.111.111-11", "01/01/1990", 500);
+    salva(f2, out);
+    free(f2);
+    TFunc *f3 = funcionario(3, "Fátima", "222.222.222-22", "02/02/1980", 1000);
+    salva(f3, out);
+    free(f3);
+    TFunc *f4 = funcionario(4, "Marcelo", "333.333.333-33", "03/03/1990", 1500);
+    salva(f4, out);
+    free(f4);
+    TFunc *f5 = funcionario(5, "Silvia", "444.444.444-44", "04/04/1980", 900);
+    salva(f5, out);
+    free(f5);
 }
 
-int gerarNumeroAleatorio(int min, int max)
+int cria_base_desordenada(FILE *out)
 {
+    int numeroDeFuncionarios = 0;
 
-    return rand() % (max - min + 1) + min;
-}
+    printf("\nInforme quantos funcionarios deseja cadastrar: ");
+    scanf("%d", &numeroDeFuncionarios);
 
-void gerarCPF(char *cpf)
-{
-
-    int digito1 = gerarNumeroAleatorio(0, 9);
-    int digito2 = gerarNumeroAleatorio(0, 9);
-    int digito3 = gerarNumeroAleatorio(0, 9);
-    int digito4 = gerarNumeroAleatorio(0, 9);
-    int digito5 = gerarNumeroAleatorio(0, 9);
-
-    sprintf(cpf, "%d%d%d%d.%d%d%d%d%d", digito1, digito2, digito3, digito4, digito5, digito1, digito2, digito3, digito4);
-}
-
-void gerarDataNascimento(char *dataNascimento)
-{
-    int dia = gerarNumeroAleatorio(1, 28);
-    int mes = gerarNumeroAleatorio(1, 12);
-    int ano = gerarNumeroAleatorio(1970, 2002);
-
-    sprintf(dataNascimento, "%02d/%02d/%04d", dia, mes, ano);
-}
-
-void cria_e_salva(FILE *out)
-{
-    int n = 0;
-
-    printf("\nDigite quantos funcionários deseja cadastrar: ");
-    scanf("%d", &n);
-
-    printf("\n>>> Inserindo %d funcionários no arquivo...", n);
-
-    int i = 0;
+    int codigos[numeroDeFuncionarios];
 
     srand(time(NULL));
 
-    for (i = 0; i < n; i++)
+    for (int i = 0; i < numeroDeFuncionarios; i++)
     {
-        char nome[50];
-        gerarNome(i + 1, nome);
+        codigos[i] = i + 1;
+    }
 
-        char cpf[12];
-        gerarCPF(cpf);
+    for (int i = numeroDeFuncionarios - 1; i > 0; i--)
+    {
+        int j = rand() % (i + 1);
+        int temp = codigos[i];
+        codigos[i] = codigos[j];
+        codigos[j] = temp;
+    }
 
-        char dataNascimento[11];
-        gerarDataNascimento(dataNascimento);
-
-        TFunc *f1 = funcionario(i + 1, nome, cpf, dataNascimento, (i + 1) * 450);
+    for (int x = 0; x < numeroDeFuncionarios; x++)
+    {
+        int codigoAleatorio = codigos[x];
+        TFunc *f1 = funcionario(codigoAleatorio, "Carlos", "000.000.000-00", "01/01/1980", 3000);
         salva(f1, out);
-        fflush(out);
         free(f1);
     }
+
+    return numeroDeFuncionarios;
 }
 
-void le_funcionarios_e_imprime(FILE *in)
+
+int cria_base_ordenada(FILE *out)
+{
+
+    int numeroDeFuncionarios = 0;
+    printf("\nInforme quantos funcionarios deseja cadastrar: ");
+    scanf("%d", &numeroDeFuncionarios);
+
+    srand(time(NULL));
+
+    for(int x = 0; x < numeroDeFuncionarios; x++)
+    {
+        TFunc *f1 = funcionario(x+1, "Carlos", "000.000.000-00", "01/01/1980", 3000);
+        salva(f1, out);
+        free(f1);
+    }
+
+    return numeroDeFuncionarios;
+}
+
+void le_funcionarios(FILE *in)
 {
     printf("\n\nLendo funcionários do arquivo...\n\n");
     rewind(in);
@@ -212,94 +221,122 @@ void sobrescreve_quarto_funcionario(FILE *in)
 
 void busca_sequencial(FILE *in)
 {
+    int c;
+    rewind(in);
+    TFunc *f;
+    int found = 0;
+    int cont = 0;
 
-    TFunc funcionario;
-    int i = 0;
-    int codigo;
-    int comp;
+    clock_t inicio = clock();
 
-    printf("\nDigite o código do funcionário que deseja buscar: ");
-    scanf("%d", &codigo);
+    printf("\n\nInforme o codigo do funcionario: ");
+    scanf("%d", &c);
 
-    while (fread(&funcionario.cod, sizeof(int), 1, in) == 1)
+    while((f = le(in)) != NULL)
     {
-        clock_t inicio = clock();
-
-        fread(funcionario.nome, sizeof(char), sizeof(funcionario.nome), in);
-        fread(funcionario.cpf, sizeof(char), sizeof(funcionario.cpf), in);
-        fread(funcionario.data_nascimento, sizeof(char), sizeof(funcionario.data_nascimento), in);
-        fread(&funcionario.salario, sizeof(double), 1, in);
-
-        comp++;
-
-
-        if (codigo == funcionario.cod)
+        cont++;
+        if (f->cod == c)
         {
-            printf("\n\n====== Funcionário encontrado ======\n");
-            printf("ID: %d\n", funcionario.cod);
-            printf("Nome: %s\n", funcionario.nome);
-            printf("CPF: %s\n", funcionario.cpf);
-            printf("Data de Nascimento: %s\n", funcionario.data_nascimento);
-            printf("Salário: R$%.2f\n", funcionario.salario);
-
-            i = 1;
-            clock_t fim = clock();
-
-            double tempoTotal = (double) (fim - inicio) / CLOCKS_PER_SEC;
-
-            printf("\nTempo de busca: %f segundos", tempoTotal);
-            printf("\nNúmero de comparações: %d", comp);
-
-
+            printf("\n======== Funcionario Encontrado ========\n\n");
+            imprime(f);
+            found = 1;
             break;
         }
+        free(f);
     }
+    clock_t fim = clock();
+    double tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
 
-    if (!i)
+    if(found)
     {
-        printf("\n>>> Funcionário não encontrado.\n");
+        printf("\n\nTempo de execucao da busca: %.2f\n segundos", tempo);
+        printf("Numero de comparacoes: %d\n", cont);
+    }
+    else
+    {
+        printf("Funcionario nao pertence a base de dados!...");
+        printf("\nNumero de comparacoes: %d\n", cont);
     }
 }
 
-void busca_binaria(FILE *arq, int tam) {
 
-  int cod = 0;
-
-  printf("\nDigite o código que deseja buscar: ");
-  scanf("%d", &cod);
-
-  int left = 0, right = tam - 1;
-  while(left <= right)
-  {
-    int middle = (left + right) / 2;
-    fseek(arq, middle * tamanho_registro(), SEEK_SET);
-    TFunc* func = le(arq);
-    if(cod == func->cod) {
-
-      imprime(func);
-    }
-    else if(func->cod < cod) {
-      left = middle + 1;
-    }
-    else {
-      right = middle - 1;
-    }
-  }
-
-  printf("\n>>> Funcionário não encontrado");
+int tamanho_registro()
+{
+    return sizeof(TFunc);
 }
 
-int tamanho_registro() {
-
-  return sizeof(TFunc);
-
+TFunc* busca_binaria(int cod, FILE *arq, int tam)
+{
+    clock_t inicio = clock();
+    int left = 0, right = tam - 1;
+    int cont = 0;
+    TFunc* func;
+    while(left <= right)
+    {
+        cont++;
+        int middle = (left + right) / 2;
+        fseek(arq, middle * tamanho_registro(), SEEK_SET);
+        func = le(arq);
+        if(cod == func->cod)
+        {
+            cont++;
+            printf("\n====== F U N C I O N Á R I O   E N C O N T R A D O =======\n\n");
+            imprime(func);
+            clock_t fim = clock();
+            double tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+            printf("\nTempo de busca: %lf segundos",tempo);
+            printf("\nNumero de comparacoes: %d", cont);
+            return func;
+        }
+        else if(func->cod < cod)
+        {
+            cont++;
+            left = middle + 1;
+        }
+        else
+        {
+            right = middle - 1;
+        }
+    }
+    clock_t fim = clock();
+    double tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    printf("Tempo de busca: %lf\nNumero de comparacoes: %d\n", tempo, cont);
+    return NULL;
 }
 
-int tamanho_arquivo(FILE *arq) {
-
-  fseek(arq, 0, SEEK_END);
-  int tam = trunc(ftell(arq) / tamanho_registro());
-
-  return tam;
+void insertion_sort_disco(FILE *arq, int tam)
+{
+    int i;
+    //faz o insertion sort
+    for (int j = 2; j <= tam; j++)
+    {
+        //posiciona o arquivo no registro j
+        fseek(arq, (j-1) * tamanho_registro(), SEEK_SET);
+        TFunc *fj = le(arq);
+        printf("\n********* Funcionario atual: %d\n", fj->cod);
+        i = j - 1;
+        //posiciona o cursor no registro i
+        fseek(arq, (i-1) * tamanho_registro(), SEEK_SET);
+        TFunc *fi = le(arq);
+        printf("fi = %d\n", fi->cod);
+        while ((i > 0) && (fi->cod > fj->cod))
+        {
+            //posiciona o cursor no registro i+1
+            fseek(arq, i * tamanho_registro(), SEEK_SET);
+            printf("Salvando funcionario %d na posicao %d\n", fi->cod, i+1);
+            salva(fi, arq);
+            i = i - 1;
+            //lÃª registro i
+            fseek(arq, (i-1) * tamanho_registro(), SEEK_SET);
+            fi = le(arq);
+            printf("fi = %d; i = %d\n", fi->cod, i);
+        }
+        //posiciona cursor no registro i + 1
+        fseek(arq, (i) * tamanho_registro(), SEEK_SET);
+        printf("*** Salvando funcionario %d na posicao %d\n", fj->cod, i+1);
+        //salva registro j na posiÃ§Ã£o i
+        salva(fj, arq);
+    }
+    //descarrega o buffer para ter certeza que dados foram gravados
+    fflush(arq);
 }
-

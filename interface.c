@@ -1,92 +1,94 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "interface.h"
-#include "funcionario.h"
 
 
 void MSG_MENU( )
 {
-    printf("\n\n\t>>>>>>>>>>>>>>>>>>>>>>> OPÇÕES DE MENU <<<<<<<<<<<<<<<<<<<<<<<<");
+    printf("\n\n\t>>>>>>>>>>>>>>>>>>>>>>> OPCOES DE MENU <<<<<<<<<<<<<<<<<<<<<<<<");
     printf("\n\n\t1. CRIAR BASE DE DADOS");
     printf("  \n\t2. IMPRIMIR BASE DE DADOS");
     printf("  \n\t3. BUSCA SEQUENCIAL");
-    printf("  \n\t4. BUSCA BINÁRIA");
-    printf("  \n\t5. LIMPAR TELA");
-    printf("  \n\t6. SAIR");
-
+    printf("  \n\t4. ORDENAR FUNCIONÁRIOS");
+    printf("  \n\t5. BUSCA BINARIA");
+    printf("  \n\t6. LIMPAR TELA");
+    printf("  \n\t7. SAIR");
 }
 
 void MENU(FILE *out)
 {
-    //Variaveis inteiras
-    int opcao = 0;
-    int numeroDeFuncionarios = 0;
-
+    int controle;
+    int aux, aux2, base_total = 0, base,op;
+    TFunc *aux3;
     do
     {
         MSG_MENU();
-        printf("\n\nDigite uma opcao: ");
+        printf("\n\nDIGITE UMA OPCAO: ");
         fflush(stdin);
-        scanf("%d", &opcao);
-        switch(opcao)
+        scanf("%d", &controle);
+        switch(controle)
         {
         case 1:
 
-            int opc = 0;
-
-            do{
-
-            printf("\n1 --- Base Ordenada");
-            printf("\n2 --- Base Desordenada\n");
+            printf("\n1 --- BASE ORDENADA");
+            printf("\n2 --- BASE DESORDENADA\n");
 
             printf("\nOPÇÃO: ");
-            scanf("%d", &opc);
+            scanf("%d", &op);
 
-            }while(opc != 1 && opc != 2);
+            if(op == 1)
+            {
 
-            if(opc == 1){
+                base = cria_base_ordenada(out);
+                base_total += base;
 
-            cria_e_salva(out);
-
-            }else{
-
+                printf("\n>>> BASE CRIADA COM SUCESSO");
 
             }
+            else if(op == 2)
+            {
 
+                base = cria_base_desordenada(out);
+                base_total += base;
+                printf("\n>>> BASE CRIADA COM SUCESSO");
+
+            }
             break;
+
         case 2:
-
-                le_funcionarios_e_imprime(out);
-
-
-            system("PAUSE");
+            le_funcionarios(out);
             break;
-        case 3:
 
-            FILE *arquivo = fopen("funcionario.dat", "rb");
-            busca_sequencial(arquivo);
-            fclose(arquivo);
+        case 3:
+            busca_sequencial(out);
             break;
 
         case 4:
-
-            busca_binaria(out, 5000);
-
-
+            insertion_sort_disco(out, base_total);
             break;
 
         case 5:
+            printf("\nDigite o codigo que deseja buscar: ");
+            scanf("%d", &aux);
+            busca_binaria(aux, out, base_total);
+            break;
+
+        case 6:
 
             system("clear");
+            break;
+
+        case 7:
+
+            //SAIR
+            system("clear");
+            printf("\n\n\n\t >>>>>> MSG: Saindo do MODULO...!!! <<<<<<");
             break;
 
         default:
             system("clear");
             printf("\n\n\n\t >>>>>> MSG: Digite uma opcao valida!!! <<<<<<");
-            system("PAUSE");
         } // fim do bloco switch
     }
-    while(opcao != 6);
+    while(controle != 7);
 }
-
-//FIM

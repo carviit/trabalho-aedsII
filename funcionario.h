@@ -1,18 +1,14 @@
-//
-// Created by Vanessa Braganholo on 16/09/2018.
-//
-
 #ifndef FUNCIONARIOS_FUNCIONARIO_H
 #define FUNCIONARIOS_FUNCIONARIO_H
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
-typedef struct Funcionario
-{
+typedef struct Funcionario {
     int cod;
     char nome[50];
-    char cpf[12];
+    char cpf[15];
     char data_nascimento[11];
     double salario;
 } TFunc;
@@ -37,25 +33,20 @@ void sobrescreve_quarto_funcionario(FILE *in);
 
 void adiciona_funcionario(FILE *in);
 
-void le_funcionarios_e_imprime(FILE *in);
+void adiciona_funcionario(FILE *in);
 
-void cria_e_salva(FILE *out);
+void le_funcionarios(FILE *out);
 
-void gerarNome(int contador, char *nome);
+int cria_base_desordenada(FILE *out);
 
-int gerarNumeroAleatorio(int min, int max);
-
-void gerarCPF(char *cpf);
-
-void gerarDataNascimento(char *dataNascimento);
+int cria_base_ordenada(FILE *out);
 
 void busca_sequencial(FILE *in);
 
-void busca_binaria(FILE *arq, int tam);
-
 int tamanho_registro();
 
-int tamanho_arquivo(FILE *arq);
+TFunc* busca_binaria(int cod, FILE *arq, int tam);
+
+void insertion_sort_disco(FILE *arq, int tam);
 
 #endif //FUNCIONARIOS_FUNCIONARIO_H
-
