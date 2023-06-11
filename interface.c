@@ -64,7 +64,24 @@ void MENU(FILE *out)
             break;
 
         case 4:
-            insertion_sort_disco(out, base_total);
+
+            printf("\n1 --- Insertion Sort");
+            printf("\n2 --- Selection Sort\n");
+
+            printf("\nOPÇÃO: ");
+            scanf("%d", &op);
+
+            if(op == 1)
+            {
+                insertion_sort_disco(out, base_total);
+
+            }
+            else if (op == 2)
+            {
+                selection_sort_disco(out, base_total);
+
+            }
+
             break;
 
         case 5:

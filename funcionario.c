@@ -340,3 +340,44 @@ void insertion_sort_disco(FILE *arq, int tam)
     //descarrega o buffer para ter certeza que dados foram gravados
     fflush(arq);
 }
+
+void selection_sort_disco(FILE *arq, int tam) {
+    rewind(arq); // posiciona o cursor no início do arquivo
+
+    // faz o selection sort
+    for (int i = 1; i < tam; i++) {
+        // posiciona o cursor no registro i
+        fseek(arq, (i - 1) * tamanho_registro(), SEEK_SET);
+        TFunc *fi = le(arq);
+        printf("\n******** Registro atual: %d, pos = %d\n", fi->cod, i);
+
+        // procura o menor elemento do restante do arquivo (registros i+1 até tam)
+        // Assume que o menor é o próximo (i + 1)
+        // i + 1 sempre existe, pois o loop for vai até tam - 1
+        fseek(arq, i * tamanho_registro(), SEEK_SET);
+        TFunc *fmenor = le(arq);
+        int posmenor = i + 1;
+
+        for (int j = i + 2; j <= tam; j++) {
+            TFunc *fj = le(arq);
+            if ((fj->cod) < (fmenor->cod)) {
+                fmenor = fj;
+                posmenor = j;
+            }
+        }
+
+        // Troca fmenor de posição com fi, se realmente for menor
+        if (fmenor->cod < fi->cod) {
+            printf("Troca %d na posição %d por %d na posição %d\n", fi->cod, i, fmenor->cod, posmenor);
+            fseek(arq, (posmenor - 1) * tamanho_registro(), SEEK_SET);
+            salva(fi, arq);
+            fseek(arq, (i - 1) * tamanho_registro(), SEEK_SET);
+            salva(fmenor, arq);
+        } else {
+            printf("Não troca...");
+        }
+    }
+
+    // descarrega o buffer para ter certeza de que os dados foram gravados
+    fflush(arq);
+}
