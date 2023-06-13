@@ -1,6 +1,7 @@
 #include "funcionario.h"
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include <stdarg.h>
 
 // Imprime funcionario
@@ -341,6 +342,41 @@ void insertion_sort_disco(FILE *arq, int tam)
     fflush(arq);
 }
 
+int sizeFile(FILE *file, int contSizeFile) {
+
+    int bytesAUX = 0;
+
+    while(!feof(file)) {
+
+        fseek(file, bytesAUX * sizeof(TFunc), SEEK_SET);
+
+        TFunc *aux = le(file);
+
+        if(aux != NULL) {
+            contSizeFile++;
+        }
+
+        bytesAUX++;
+    }
+
+    return contSizeFile;
+}
+
+void printParticaoCodFuncionario(FILE *file, char nomeParticao[]) {
+
+    printf("\nID funcionario da particao %s: \n", nomeParticao);
+
+    for (int i = 0; i < sizeFile(file, 0); ++i) {
+
+        fseek(file, i * sizeof(TFunc), SEEK_SET) ;
+        TFunc *aux = le(file);
+
+        printf(" %i ", aux->cod);
+    }
+
+    printf("\n");
+}
+
 void selection_sort_disco(FILE *arq, int tam) {
     rewind(arq); // posiciona o cursor no início do arquivo
 
@@ -380,4 +416,109 @@ void selection_sort_disco(FILE *arq, int tam) {
 
     // descarrega o buffer para ter certeza de que os dados foram gravados
     fflush(arq);
+}
+
+int qtdRegistros(FILE *in){
+
+    fseek(in, 0, SEEK_END);
+
+    int tam = trunc(ftell(in) / tamanho());
+
+    return tam;
+
+}
+
+void insertion_sort_memoria(FILE *arq, int tam) {
+    TFunc *v[tam];
+    //le o arquivo e coloca no vetor
+    rewind(arq); //posiciona cursor no inicio do arquivo
+    TFunc *f = le(arq);
+    int i = 0;
+    while (!feof(arq)) {
+        v[i] = f;
+        f = le(arq);
+        i++;
+    }
+    //faz o insertion sort
+    for (int j = 1; j < tam; j++) {
+        TFunc *f = v[j];
+        i = j - 1;
+        while ((i >= 0) && (v[i]->cod > f->cod)) {
+            v[i + 1] = v[i];
+            i = i - 1;
+        }
+        v[i+1] = f;
+    }
+    //grava vetor no arquivo, por cima do conteÃºdo anterior
+    rewind(arq);
+    for (int i = 0; i < tam; i++) {
+        salva(v[i], arq);
+    }
+    //descarrega o buffer para ter certeza que dados foram gravados
+    fflush(arq);
+
+}
+
+void criaParticao(int numeroDeParticoes) {
+
+    for (int i = 0; i < numeroDeParticoes; i++) {
+
+        char nomeParticao[100];
+        char str1[100];
+        char str2[100] = ".dat";
+
+        sprintf(str1, "%d", i);
+        strcpy(nomeParticao, "particao");
+        strcat(nomeParticao, str1);
+        strcat(nomeParticao, str2);
+
+        FILE *file = fopen(nomeParticao, "wb+");
+
+        fclose(file);
+    }
+}
+
+
+void particionaArquivo(FILE *file, int numeroDeParticoes, int sizeFile) {
+
+    rewind(file);
+
+    char nomeParticao[100];
+    char str1[100];
+    char str2[100] = ".dat";
+
+    for (int i = 0; i < sizeFile; i++) {
+
+        TFunc *auxFunc = le(file);
+
+        int selectedParticipation = auxFunc->cod % numeroDeParticoes;
+
+        snprintf(str1, sizeof(str1), "%d", selectedParticipation);
+        strcpy(nomeParticao, "particao");
+        strcat(nomeParticao, str1);
+        strcat(nomeParticao, str2);
+
+        FILE *filePartition = fopen(nomeParticao, "ab+");
+
+        salva(auxFunc, filePartition);
+
+        insertion_sort_memoria(filePartition, qtdRegistros(filePartition));
+
+        fclose(filePartition);
+
+    }
+
+    for (int i = 0; i < numeroDeParticoes; ++i) {
+
+        snprintf(str1, sizeof(str1), "%d", i);
+        strcpy(nomeParticao, "particao");
+        strcat(nomeParticao, str1);
+        strcat(nomeParticao, str2);
+
+        FILE *filePartition = fopen(nomeParticao, "rb+");
+
+        printParticaoCodFuncionario(filePartition, nomeParticao);
+
+        fclose(filePartition);
+    }
 }

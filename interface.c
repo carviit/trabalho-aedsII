@@ -11,14 +11,15 @@ void MSG_MENU( )
     printf("  \n\t3. BUSCA SEQUENCIAL");
     printf("  \n\t4. ORDENAR FUNCIONÁRIOS");
     printf("  \n\t5. BUSCA BINARIA");
-    printf("  \n\t6. LIMPAR TELA");
-    printf("  \n\t7. SAIR");
+    printf("  \n\t6. PARTICIONAR ARQUIVOS");
+    printf("  \n\t7. LIMPAR TELA");
+    printf("  \n\t8. SAIR");
 }
 
 void MENU(FILE *out)
 {
     int controle;
-    int aux, aux2, base_total = 0, base,op;
+    int aux, aux2, base_total = 0, base,op, numeroDeParticoes;
     TFunc *aux3;
     do
     {
@@ -92,10 +93,21 @@ void MENU(FILE *out)
 
         case 6:
 
-            system("clear");
+            printf("\nDigite a quantidade de partições desejadas: ");
+            scanf("%d", &numeroDeParticoes);
+
+            criaParticao(numeroDeParticoes);
+
+            particionaArquivo(out, numeroDeParticoes, base_total);
+
             break;
 
         case 7:
+
+            system("clear");
+            break;
+
+        case 8:
 
             //SAIR
             system("clear");
@@ -107,5 +119,5 @@ void MENU(FILE *out)
             printf("\n\n\n\t >>>>>> MSG: Digite uma opcao valida!!! <<<<<<");
         } // fim do bloco switch
     }
-    while(controle != 7);
+    while(controle != 8);
 }

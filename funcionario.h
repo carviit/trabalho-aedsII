@@ -45,10 +45,22 @@ void busca_sequencial(FILE *in);
 
 int tamanho_registro();
 
+int qtdRegistros(FILE *in);
+
 TFunc* busca_binaria(int cod, FILE *arq, int tam);
 
 void insertion_sort_disco(FILE *arq, int tam);
 
 void selection_sort_disco(FILE *arq, int tam);
+
+void insertion_sort_memoria(FILE *arq, int tam);
+
+void criaParticao(int numeroDeParticoes);
+
+void printParticaoCodFuncionario(FILE *file, char nomeParticao[]);
+
+int sizeFile(FILE *file, int contSizeFile);
+
+void particionaArquivo(FILE *file, int numeroDeParticoes, int sizeFile);
 
 #endif //FUNCIONARIOS_FUNCIONARIO_H
