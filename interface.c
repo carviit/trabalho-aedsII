@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "interface.h"
+#include <dirent.h>
 
 
 void MSG_MENU( )
@@ -19,7 +20,7 @@ void MSG_MENU( )
 void MENU(FILE *out)
 {
     int controle;
-    int aux, aux2, base_total = 0, base,op, numeroDeParticoes;
+    int aux, aux2, base_total = 0, base,op, numeroDeRegistros;
     TFunc *aux3;
     do
     {
@@ -93,12 +94,16 @@ void MENU(FILE *out)
 
         case 6:
 
-            printf("\nDigite a quantidade de partições desejadas: ");
-            scanf("%d", &numeroDeParticoes);
+            printf("\nDigite a quantidade de registros por partição desejadas: ");
+            scanf("%d", &numeroDeRegistros);
 
-            criaParticao(numeroDeParticoes);
+            apagarParticoes();
 
-            particionaArquivo(out, numeroDeParticoes, base_total);
+            int particoes_total = calcularNumeroParticoes(base_total, numeroDeRegistros);
+
+            criaParticao(particoes_total);
+
+            particionaArquivo(out, particoes_total, base_total);
 
             break;
 

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdarg.h>
+#include <dirent.h>
 
 // Imprime funcionario
 void imprime(TFunc *func)
@@ -46,6 +47,29 @@ void salva(TFunc *func, FILE *out)
     fwrite(func->data_nascimento, sizeof(char), sizeof(func->data_nascimento), out);
     fwrite(&func->salario, sizeof(double), 1, out);
 }
+
+void apagarParticoes() {
+    DIR *dir;
+    struct dirent *entry;
+
+    dir = opendir(".");
+    if (dir == NULL) {
+        perror("Erro ao abrir diretório");
+        return;
+    }
+
+    while ((entry = readdir(dir)) != NULL) {
+        if (entry->d_type == DT_REG) {  // Verifica se é um arquivo regular
+            char *filename = entry->d_name;
+            if (strncmp(filename, "particao", 8) == 0 && strstr(filename, ".dat") != NULL) {
+                remove(filename);
+            }
+        }
+    }
+
+    closedir(dir);
+}
+
 
 // Le um funcionario do arquivo in na posicao atual do cursor
 // Retorna um ponteiro para funcionario lido do arquivo
@@ -459,6 +483,17 @@ void insertion_sort_memoria(FILE *arq, int tam) {
 
 }
 
+int calcularNumeroParticoes(int numRegistros, int numRegistrosPorParticao) {
+    int numParticoes = numRegistros / numRegistrosPorParticao; // Calcula o número de partições
+    int registrosRestantes = numRegistros % numRegistrosPorParticao; // Calcula o número de registros restantes
+
+    if (registrosRestantes > 0) {
+        numParticoes++; // Incrementa o número de partições se houver registros restantes
+    }
+
+    return numParticoes;
+}
+
 void criaParticao(int numeroDeParticoes) {
 
     for (int i = 0; i < numeroDeParticoes; i++) {
@@ -478,47 +513,39 @@ void criaParticao(int numeroDeParticoes) {
     }
 }
 
-
 void particionaArquivo(FILE *file, int numeroDeParticoes, int sizeFile) {
-
     rewind(file);
 
     char nomeParticao[100];
     char str1[100];
     char str2[100] = ".dat";
 
+    // Loop para particionar o arquivo original
     for (int i = 0; i < sizeFile; i++) {
-
-        TFunc *auxFunc = le(file);
-
-        int selectedParticipation = auxFunc->cod % numeroDeParticoes;
+        TFunc *auxFunc = le(file);  // Lê um registro do arquivo original
+        int selectedParticipation = auxFunc->cod % numeroDeParticoes;  // Calcula a partição a que o registro pertence
 
         snprintf(str1, sizeof(str1), "%d", selectedParticipation);
         strcpy(nomeParticao, "particao");
         strcat(nomeParticao, str1);
         strcat(nomeParticao, str2);
 
-        FILE *filePartition = fopen(nomeParticao, "ab+");
-
-        salva(auxFunc, filePartition);
-
-        insertion_sort_memoria(filePartition, qtdRegistros(filePartition));
-
-        fclose(filePartition);
-
+        FILE *filePartition = fopen(nomeParticao, "ab+");  // Abre a partição correspondente ao registro
+        salva(auxFunc, filePartition);  // Salva o registro na partição
+        fclose(filePartition);  // Fecha a partição
     }
 
+    // Loop para ordenar e imprimir as partições
     for (int i = 0; i < numeroDeParticoes; ++i) {
-
         snprintf(str1, sizeof(str1), "%d", i);
         strcpy(nomeParticao, "particao");
         strcat(nomeParticao, str1);
         strcat(nomeParticao, str2);
 
-        FILE *filePartition = fopen(nomeParticao, "rb+");
-
-        printParticaoCodFuncionario(filePartition, nomeParticao);
-
-        fclose(filePartition);
+        FILE *filePartition = fopen(nomeParticao, "rb+");  // Abre a partição para leitura e escrita
+        insertion_sort_memoria(filePartition, qtdRegistros(filePartition));  // Ordena os registros da partição
+        printParticaoCodFuncionario(filePartition, nomeParticao);  // Imprime os IDs dos funcionários na partição
+        fclose(filePartition);  // Fecha a partição
     }
 }
+

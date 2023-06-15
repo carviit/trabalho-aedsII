@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <dirent.h>
 
 typedef struct Funcionario {
     int cod;
@@ -61,6 +62,10 @@ void printParticaoCodFuncionario(FILE *file, char nomeParticao[]);
 
 int sizeFile(FILE *file, int contSizeFile);
 
+void apagarParticoes();
+
 void particionaArquivo(FILE *file, int numeroDeParticoes, int sizeFile);
+
+int calcularNumeroParticoes(int numRegistros, int numRegistrosPorParticao);
 
 #endif //FUNCIONARIOS_FUNCIONARIO_H
