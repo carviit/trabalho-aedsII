@@ -16,6 +16,7 @@ int main(int argc, char** argv)
     }
     else
     {
+        apagarParticoes();
         MENU(out);
         fclose(out);
     }

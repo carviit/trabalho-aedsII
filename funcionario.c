@@ -48,20 +48,25 @@ void salva(TFunc *func, FILE *out)
     fwrite(&func->salario, sizeof(double), 1, out);
 }
 
-void apagarParticoes() {
+void apagarParticoes()
+{
     DIR *dir;
     struct dirent *entry;
 
     dir = opendir(".");
-    if (dir == NULL) {
+    if (dir == NULL)
+    {
         perror("Erro ao abrir diretório");
         return;
     }
 
-    while ((entry = readdir(dir)) != NULL) {
-        if (entry->d_type == DT_REG) {  // Verifica se é um arquivo regular
+    while ((entry = readdir(dir)) != NULL)
+    {
+        if (entry->d_type == DT_REG)    // Verifica se é um arquivo regular
+        {
             char *filename = entry->d_name;
-            if (strncmp(filename, "particao", 8) == 0 && strstr(filename, ".dat") != NULL) {
+            if (strncmp(filename, "particao", 8) == 0 && strstr(filename, ".dat") != NULL)
+            {
                 remove(filename);
             }
         }
@@ -366,17 +371,20 @@ void insertion_sort_disco(FILE *arq, int tam)
     fflush(arq);
 }
 
-int sizeFile(FILE *file, int contSizeFile) {
+int sizeFile(FILE *file, int contSizeFile)
+{
 
     int bytesAUX = 0;
 
-    while(!feof(file)) {
+    while(!feof(file))
+    {
 
         fseek(file, bytesAUX * sizeof(TFunc), SEEK_SET);
 
         TFunc *aux = le(file);
 
-        if(aux != NULL) {
+        if(aux != NULL)
+        {
             contSizeFile++;
         }
 
@@ -386,11 +394,13 @@ int sizeFile(FILE *file, int contSizeFile) {
     return contSizeFile;
 }
 
-void printParticaoCodFuncionario(FILE *file, char nomeParticao[]) {
+void printParticaoCodFuncionario(FILE *file, char nomeParticao[])
+{
 
     printf("\nID funcionario da particao %s: \n", nomeParticao);
 
-    for (int i = 0; i < sizeFile(file, 0); ++i) {
+    for (int i = 0; i < sizeFile(file, 0); ++i)
+    {
 
         fseek(file, i * sizeof(TFunc), SEEK_SET) ;
         TFunc *aux = le(file);
@@ -401,11 +411,13 @@ void printParticaoCodFuncionario(FILE *file, char nomeParticao[]) {
     printf("\n");
 }
 
-void selection_sort_disco(FILE *arq, int tam) {
+void selection_sort_disco(FILE *arq, int tam)
+{
     rewind(arq); // posiciona o cursor no início do arquivo
 
     // faz o selection sort
-    for (int i = 1; i < tam; i++) {
+    for (int i = 1; i < tam; i++)
+    {
         // posiciona o cursor no registro i
         fseek(arq, (i - 1) * tamanho_registro(), SEEK_SET);
         TFunc *fi = le(arq);
@@ -418,22 +430,27 @@ void selection_sort_disco(FILE *arq, int tam) {
         TFunc *fmenor = le(arq);
         int posmenor = i + 1;
 
-        for (int j = i + 2; j <= tam; j++) {
+        for (int j = i + 2; j <= tam; j++)
+        {
             TFunc *fj = le(arq);
-            if ((fj->cod) < (fmenor->cod)) {
+            if ((fj->cod) < (fmenor->cod))
+            {
                 fmenor = fj;
                 posmenor = j;
             }
         }
 
         // Troca fmenor de posição com fi, se realmente for menor
-        if (fmenor->cod < fi->cod) {
+        if (fmenor->cod < fi->cod)
+        {
             printf("Troca %d na posição %d por %d na posição %d\n", fi->cod, i, fmenor->cod, posmenor);
             fseek(arq, (posmenor - 1) * tamanho_registro(), SEEK_SET);
             salva(fi, arq);
             fseek(arq, (i - 1) * tamanho_registro(), SEEK_SET);
             salva(fmenor, arq);
-        } else {
+        }
+        else
+        {
             printf("Não troca...");
         }
     }
@@ -442,7 +459,8 @@ void selection_sort_disco(FILE *arq, int tam) {
     fflush(arq);
 }
 
-int qtdRegistros(FILE *in){
+int qtdRegistros(FILE *in)
+{
 
     fseek(in, 0, SEEK_END);
 
@@ -452,22 +470,26 @@ int qtdRegistros(FILE *in){
 
 }
 
-void insertion_sort_memoria(FILE *arq, int tam) {
+void insertion_sort_memoria(FILE *arq, int tam)
+{
     TFunc *v[tam];
     //le o arquivo e coloca no vetor
     rewind(arq); //posiciona cursor no inicio do arquivo
     TFunc *f = le(arq);
     int i = 0;
-    while (!feof(arq)) {
+    while (!feof(arq))
+    {
         v[i] = f;
         f = le(arq);
         i++;
     }
     //faz o insertion sort
-    for (int j = 1; j < tam; j++) {
+    for (int j = 1; j < tam; j++)
+    {
         TFunc *f = v[j];
         i = j - 1;
-        while ((i >= 0) && (v[i]->cod > f->cod)) {
+        while ((i >= 0) && (v[i]->cod > f->cod))
+        {
             v[i + 1] = v[i];
             i = i - 1;
         }
@@ -475,7 +497,8 @@ void insertion_sort_memoria(FILE *arq, int tam) {
     }
     //grava vetor no arquivo, por cima do conteÃºdo anterior
     rewind(arq);
-    for (int i = 0; i < tam; i++) {
+    for (int i = 0; i < tam; i++)
+    {
         salva(v[i], arq);
     }
     //descarrega o buffer para ter certeza que dados foram gravados
@@ -483,20 +506,24 @@ void insertion_sort_memoria(FILE *arq, int tam) {
 
 }
 
-int calcularNumeroParticoes(int numRegistros, int numRegistrosPorParticao) {
+int calcularNumeroParticoes(int numRegistros, int numRegistrosPorParticao)
+{
     int numParticoes = numRegistros / numRegistrosPorParticao; // Calcula o número de partições
     int registrosRestantes = numRegistros % numRegistrosPorParticao; // Calcula o número de registros restantes
 
-    if (registrosRestantes > 0) {
+    if (registrosRestantes > 0)
+    {
         numParticoes++; // Incrementa o número de partições se houver registros restantes
     }
 
     return numParticoes;
 }
 
-void criaParticao(int numeroDeParticoes) {
+void criaParticao(int numeroDeParticoes)
+{
 
-    for (int i = 0; i < numeroDeParticoes; i++) {
+    for (int i = 0; i < numeroDeParticoes; i++)
+    {
 
         char nomeParticao[100];
         char str1[100];
@@ -513,7 +540,8 @@ void criaParticao(int numeroDeParticoes) {
     }
 }
 
-void particionaArquivo(FILE *file, int numeroDeParticoes, int sizeFile) {
+void particionaArquivo(FILE *file, int numeroDeParticoes, int sizeFile)
+{
     rewind(file);
 
     char nomeParticao[100];
@@ -521,7 +549,8 @@ void particionaArquivo(FILE *file, int numeroDeParticoes, int sizeFile) {
     char str2[100] = ".dat";
 
     // Loop para particionar o arquivo original
-    for (int i = 0; i < sizeFile; i++) {
+    for (int i = 0; i < sizeFile; i++)
+    {
         TFunc *auxFunc = le(file);  // Lê um registro do arquivo original
         int selectedParticipation = auxFunc->cod % numeroDeParticoes;  // Calcula a partição a que o registro pertence
 
@@ -536,7 +565,8 @@ void particionaArquivo(FILE *file, int numeroDeParticoes, int sizeFile) {
     }
 
     // Loop para ordenar e imprimir as partições
-    for (int i = 0; i < numeroDeParticoes; ++i) {
+    for (int i = 0; i < numeroDeParticoes; ++i)
+    {
         snprintf(str1, sizeof(str1), "%d", i);
         strcpy(nomeParticao, "particao");
         strcat(nomeParticao, str1);
@@ -548,4 +578,3 @@ void particionaArquivo(FILE *file, int numeroDeParticoes, int sizeFile) {
         fclose(filePartition);  // Fecha a partição
     }
 }
-

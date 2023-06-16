@@ -6,7 +6,8 @@
 #include <time.h>
 #include <dirent.h>
 
-typedef struct Funcionario {
+typedef struct Funcionario
+{
     int cod;
     char nome[50];
     char cpf[15];
@@ -46,6 +47,8 @@ void busca_sequencial(FILE *in);
 
 int tamanho_registro();
 
+void apagarParticoes();
+
 int qtdRegistros(FILE *in);
 
 TFunc* busca_binaria(int cod, FILE *arq, int tam);
@@ -61,8 +64,6 @@ void criaParticao(int numeroDeParticoes);
 void printParticaoCodFuncionario(FILE *file, char nomeParticao[]);
 
 int sizeFile(FILE *file, int contSizeFile);
-
-void apagarParticoes();
 
 void particionaArquivo(FILE *file, int numeroDeParticoes, int sizeFile);
 

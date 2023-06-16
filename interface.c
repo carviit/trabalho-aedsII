@@ -3,7 +3,6 @@
 #include "interface.h"
 #include <dirent.h>
 
-
 void MSG_MENU( )
 {
     printf("\n\n\t>>>>>>>>>>>>>>>>>>>>>>> OPCOES DE MENU <<<<<<<<<<<<<<<<<<<<<<<<");
@@ -97,8 +96,6 @@ void MENU(FILE *out)
             printf("\nDigite a quantidade de registros por partição desejadas: ");
             scanf("%d", &numeroDeRegistros);
 
-            apagarParticoes();
-
             int particoes_total = calcularNumeroParticoes(base_total, numeroDeRegistros);
 
             criaParticao(particoes_total);
@@ -116,6 +113,7 @@ void MENU(FILE *out)
 
             //SAIR
             system("clear");
+            apagarParticoes();
             printf("\n\n\n\t >>>>>> MSG: Saindo do MODULO...!!! <<<<<<");
             break;
 
